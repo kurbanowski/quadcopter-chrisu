@@ -25,6 +25,7 @@ You can run the main script with either manual input or by redirecting input fro
 ```bash
 python main.py < input_task.txt
 ```
+Output returns string informing if there is a route connecting start_point and end_point.
 
 ## Arguments
 
