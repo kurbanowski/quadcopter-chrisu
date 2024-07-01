@@ -87,7 +87,7 @@ class Game:
                         # measure find time
                         self.start_point.connect()
                         start_time = time.time()
-                        traversed_transmitters = []
+                        traversed_transmitters = set()
                         find_connected_transmitters(
                             self.root,
                             [self.start_point],

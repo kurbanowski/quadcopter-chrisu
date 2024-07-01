@@ -67,7 +67,7 @@ Wygeneruj pseudolosowe dane z generate_random_input.py
         root.insert(root, transmitter, 0, 0, size, size)
 
     start_point.connect()
-    traversed_transmitters = []
+    traversed_transmitters = set()
     find_connected_transmitters(
         root,
         [start_point],
