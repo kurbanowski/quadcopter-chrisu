@@ -1,6 +1,6 @@
 import pygame
 import time
-from helper import find_connected_transmitters
+from connections import Connections
 from transmitter import Transmitter
 
 
@@ -81,6 +81,7 @@ class Game:
 
                         self.start_point.x = x
                         self.start_point.y = y
+                        print(self.start_point)
                         for t in self.transmitters:
                             t.disconnect()
 
@@ -88,11 +89,10 @@ class Game:
                         self.start_point.connect()
                         start_time = time.time()
                         traversed_transmitters = set()
-                        find_connected_transmitters(
-                            self.root,
+                        connections = Connections(self.root, self.end_point, self.max_r)
+                        connections.find_connected_transmitters(
                             [self.start_point],
-                            traversed_transmitters,
-                            self.max_r
+                            traversed_transmitters
                         )
 
                         query_time = time.time() - start_time
