@@ -1,7 +1,10 @@
 import pygame
 import time
 from connections import Connections
-from transmitter import Transmitter
+from quadnode import QuadNode
+
+RESPONSE_TRUE = "bezpieczny przelot jest możliwy"
+RESPONSE_FALSE = "bezpieczny przelot nie jest możliwy"
 
 
 class Game:
@@ -68,6 +71,19 @@ class Game:
 
                 # Place a new start_point with mouse click
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 3:
+                        pygame.display.set_caption(
+                            f"Quadcopter transmitters - Place new Start Point"
+                        )
+
+                        # capture coordinates
+                        x, y = pygame.mouse.get_pos()
+                        x = x // self.scale
+                        y = self.height - y  # adjust y for pygame coordinates
+                        y = y // self.scale
+
+                        self.end_point.x = x
+                        self.end_point.y = y
                     if event.button == 1:
                         pygame.display.set_caption(
                             f"Quadcopter transmitters - Processing..."
@@ -81,20 +97,23 @@ class Game:
 
                         self.start_point.x = x
                         self.start_point.y = y
-                        print(self.start_point)
+
+                        new_root = QuadNode(0, 0, self.root.x1, self.root.y1, self.root.node_capacity)
                         for t in self.transmitters:
                             t.disconnect()
+                            new_root.insert(new_root, t, 0, 0, self.root.x1, self.root.y1)
 
                         # measure find time
                         self.start_point.connect()
                         start_time = time.time()
                         traversed_transmitters = set()
-                        connections = Connections(self.root, self.end_point, self.max_r)
-                        connections.find_connected_transmitters(
+                        connections = Connections(new_root, self.end_point, self.max_r)
+                        connected = connections.find_connected_transmitters(
                             [self.start_point],
                             traversed_transmitters
                         )
-
+                        print(RESPONSE_TRUE if connected else RESPONSE_FALSE)
+                        print(f"{self.start_point.x} {self.start_point.y}")
                         query_time = time.time() - start_time
                         connections = sum([t.connected for t in self.transmitters])
                         pygame.display.set_caption(
