@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import argparse
 from quadnode import QuadNode
-from helper import find_connected_transmitters
+from connections import Connections
 from transmitter import Transmitter
 
 
@@ -11,7 +11,6 @@ NODE_CAPACITY = 4
 
 RESPONSE_TRUE = "bezpieczny przelot jest możliwy"
 RESPONSE_FALSE = "bezpieczny przelot nie jest możliwy"
-
 
 def main():
     parser = argparse.ArgumentParser(
@@ -68,11 +67,10 @@ Wygeneruj pseudolosowe dane z generate_random_input.py
 
     start_point.connect()
     traversed_transmitters = set()
-    find_connected_transmitters(
-        root,
+    connections = Connections(root, end_point, max_r)
+    connections.find_connected_transmitters(
         [start_point],
         traversed_transmitters,
-        max_r
     )
 
     if end_point.connected:
